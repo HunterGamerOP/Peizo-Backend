@@ -63,3 +63,31 @@ def get_stats():
         "max_power": float(data_df["power_mW"].max()),
         "min_power": float(data_df["power_mW"].min()),
     }
+
+import os
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000))
+    )
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# Allow your Netlify domain
+origins = [
+    "http://localhost:5173",  # local dev
+    "https://6937b24bbad323d1d072f514--shiny-sunflower-ebdbcf.netlify.app/"  # replace with your site
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
